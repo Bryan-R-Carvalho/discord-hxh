@@ -1,6 +1,5 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import appConfig from '../config.json';
-import fundo from '../imagens/fundo.png';
 
 function GlobalStyle(){
     return(
@@ -71,10 +70,9 @@ export default function PaginaInicial() {
             styleSheet={
             {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                backgroundColor: appConfig.theme.colors.primary[500],
-                backgroundImage: 'url(https://preview.redd.it/rlsl76tveg321.png?width=2560&format=png&auto=webp&s=b152de10d4fa342fda9d06c2351501ad37687697)',
-            
-                //backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
+                //backgroundColor: appConfig.theme.colors.primary[500],
+                backgroundImage: 'url(https://raw.githubusercontent.com/Bryan-R-Carvalho/discord-hxh/master/imagens/sobestrelas.png)',
+                backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
             }
         }
         >
