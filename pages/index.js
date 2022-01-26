@@ -65,13 +65,14 @@ export default function PaginaInicial() {
   
     return (
       <>
-        <GlobalStyle />
+        <GlobalStyle /> 
         <Box
             styleSheet={
             {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                //backgroundColor: appConfig.theme.colors.primary[500],
-                backgroundImage: 'url(https://raw.githubusercontent.com/Bryan-R-Carvalho/discord-hxh/master/imagens/sobestrelas.png)',
+                backgroundColor: appConfig.theme.colors.primary[100],
+                backgroundImage: 'url(imagens/grupo.jpg)',
+                
                 backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
             }
         }
@@ -148,10 +149,10 @@ export default function PaginaInicial() {
             >
               <Image
                     styleSheet={{
-                        borderRadius: '40%',
+                        borderRadius: '50%',
                         marginBottom: '16px',
                     }}
-                    src={`https://pbs.twimg.com/media/CxT2DGgXcAA4Ung.jpg`}
+                    src={`imagens/gon1.jpg`}
                 />
               
               <Text
@@ -171,4 +172,4 @@ export default function PaginaInicial() {
         </Box>
       </>
     );
-  }
+}
