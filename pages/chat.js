@@ -1,19 +1,44 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
+import { createClient } from '@supabase/supabase-js'
 import React from 'react';
 import appConfig from '../config.json';
+
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzM0Mjk1NywiZXhwIjoxOTU4OTE4OTU3fQ.OVn-tYfBHu0HMd3w6fevO1dKT5Ic0zigC4RW3e0RE9c';
+const SUPABASE_URL = 'https://eheiufqlsfqzglqckrcg.supabase.co';
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 
 export default function ChatPage() {
     const [mensagem, setMensagem] = React.useState('');
     const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
 
+    React.useEffect(() =>{
+        supabaseClient
+        .from('mensagens')
+        .select('*')
+        .then(({data}) => {
+            console.log('dados da consulta', data);
+            setListaDeMensagens(data);
+        });
+    }, []);
+
     function handleNovaMensagem(novaMensagem) {
         const mensagem = {
-            id: listaDeMensagens.length + 1,
+            //id: listaDeMensagens.length + 1,
             de: 'Gon',
             texto: novaMensagem,
         };
-        setListaDeMensagens([mensagem, ...listaDeMensagens]);
-        setMensagem('');
+        supabaseClient
+            .from('mensagens')
+            .insert([
+                mensagem
+            ])
+            .then((resposta) => {
+                console.log('resposta da inserção', resposta);
+            });
+
+       // setListaDeMensagens([mensagem, ...listaDeMensagens]);
+       // setMensagem('');
     }
 
     return (
@@ -58,7 +83,7 @@ export default function ChatPage() {
                     { /*{listaDeMensagens.map((mensagemAtual) =>{
                         return (
                             <li key={mensagemAtual.id}>
-                                {mensagemAtual.de} : {messagemAtual.texto}
+                                {mensagemAtual.de} : {mesagemAtual.texto}
                             </li>
                         )
                     })}*/}
@@ -119,7 +144,7 @@ function Header() {
 }
 
 function MessageList(props) {
-    console.log('MessageList', props);
+    console.log(props);
     return (
         <Box
             tag="ul"
@@ -132,7 +157,7 @@ function MessageList(props) {
                 marginBottom: '16px',
             }}
         >
-            {props.mensagens.map((mensagem) =>{
+            {props.mensagens.map((mensagem) => {
                 return (
                     <Text
                         key={mensagem.id}
@@ -159,7 +184,7 @@ function MessageList(props) {
                                 display: 'inline-block',
                                 marginRight: '8px',
                             }}
-                            src={`https://github.com/vanessametonini.png`}
+                            src={`https://github.com/${mensagem.de}.png`}
                         />
                         <Text tag="strong">
                             {mensagem.de}
@@ -179,7 +204,6 @@ function MessageList(props) {
                 </Text>
                 );               
             })}
-
         </Box>
-    );
+    )
 }
