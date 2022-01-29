@@ -14,11 +14,12 @@ export default function ChatPage() {
 
     React.useEffect(() =>{
         supabaseClient
-        .from('mensagens')
-        .select('*')
-        .then(({data}) => {
-            console.log('dados da consulta', data);
-            setListaDeMensagens(data);
+            .from('mensagens')
+            .select('*')
+            .order('id', {ascending: false})
+            .then(({data}) => {
+                console.log('dados da consulta', data);
+                setListaDeMensagens(data);
         });
     }, []);
 
@@ -33,12 +34,12 @@ export default function ChatPage() {
             .insert([
                 mensagem
             ])
-            .then((resposta) => {
-                console.log('resposta da inserção', resposta);
+            .then(({data}) => {
+                console.log('resposta da inserção', {data});
+                setListaDeMensagens([data[0], ...listaDeMensagens]);
             });
 
-       // setListaDeMensagens([mensagem, ...listaDeMensagens]);
-       // setMensagem('');
+        setMensagem('');
     }
 
     return (
