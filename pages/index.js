@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 function Titulo(props) {
     const Tag = props.tag || 'h1';
     return (
+        
         <>
             <Tag>{props.children}</Tag>
             <style jsx>{`
@@ -39,6 +40,7 @@ export default function PaginaInicial() {
 
     return (
         <>
+        <title>HunterCord | Login</title>
             <Box
                 styleSheet={
                     {
@@ -70,8 +72,8 @@ export default function PaginaInicial() {
                         as="form"
                         onSubmit={function (event) {
                             event.preventDefault();
-                            console.log('submit');
-                            router.push('/chat');
+                            console.log('submitando');
+                            router.push(`/chat?username=${username}`);
                         }}
                         styleSheet={{
                             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
