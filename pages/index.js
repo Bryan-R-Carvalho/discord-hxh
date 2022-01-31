@@ -1,5 +1,4 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
-import { initScriptLoader } from 'next/script';
 import React from 'react';
 import appConfig from '../config.json';
 import { useRouter } from 'next/router';

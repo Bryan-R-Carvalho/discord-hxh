@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import React from 'react';
 import appConfig from '../config.json';
 import { useRouter } from 'next/router';
+import { ButtonSendSticker } from '../src/components/ButtonSendSticker';
 
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzM0Mjk1NywiZXhwIjoxOTU4OTE4OTU3fQ.OVn-tYfBHu0HMd3w6fevO1dKT5Ic0zigC4RW3e0RE9c';
 const SUPABASE_URL = 'https://eheiufqlsfqzglqckrcg.supabase.co';
@@ -14,8 +15,13 @@ export default function ChatPage() {
     const usuarioLogado = router.query.username;
     console.log('router.query', router.query);
     console.log('usuarioLogado: ', usuarioLogado)
-    const [mensagem, setMensagem] = React.useState('');
-    const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
+    const [mensagem, setMensagem] = React.  useState('');
+    const [listaDeMensagens, setListaDeMensagens] = React.useState([
+        {
+            id = 1,
+            texto: ''
+        }
+    ]);
 
     React.useEffect(() =>{
         supabaseClient
@@ -24,7 +30,7 @@ export default function ChatPage() {
             .order('id', {ascending: false})
             .then(({data}) => {
                 console.log('dados da consulta', data);
-                setListaDeMensagens(data);
+               // setListaDeMensagens(data);
         });
     }, []);
 
@@ -126,6 +132,7 @@ export default function ChatPage() {
                                     color: appConfig.theme.colors.neutrals[200],
                                 }}
                             />
+                            <ButtonSendSticker/>
                         </Box>
                     </Box>
                 </Box>
