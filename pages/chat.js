@@ -9,19 +9,23 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5v
 const SUPABASE_URL = 'https://eheiufqlsfqzglqckrcg.supabase.co';
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+function escutaMensagemEmTempoReal(addMensagem){
+    return supabaseClient
+        .from('mensagens')
+        .on('INSERT', (resposta) => {
+            console.log('Nova mensagem inserida');
+            addMensagem(resposta.new);
+    })
+    .subscribe();
+}
 
 export default function ChatPage() {
     const router = useRouter();
     const usuarioLogado = router.query.username;
-    console.log('router.query', router.query);
-    console.log('usuarioLogado: ', usuarioLogado)
+    //console.log('router.query', router.query);
+    //console.log('usuarioLogado: ', usuarioLogado)
     const [mensagem, setMensagem] = React.  useState('');
-    const [listaDeMensagens, setListaDeMensagens] = React.useState([
-        {
-            id = 1,
-            texto: ''
-        }
-    ]);
+    const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
 
     React.useEffect(() =>{
         supabaseClient
@@ -29,9 +33,20 @@ export default function ChatPage() {
             .select('*')
             .order('id', {ascending: false})
             .then(({data}) => {
-                console.log('dados da consulta', data);
-               // setListaDeMensagens(data);
+               // console.log('dados da consulta', data);
+                setListaDeMensagens(data);
         });
+
+        const subscription = escutaMensagemEmTempoReal((novaMensagem) => {
+            console.log('nova mensagem:', novaMensagem);
+            setListaDeMensagens((valorAtualDaLista) =>{
+                return [novaMensagem, ...valorAtualDaLista]
+            });
+        });
+
+         return () => {
+             subscription.unsubscribe();
+         }
     }, []);
 
     function handleNovaMensagem(novaMensagem) {
@@ -46,10 +61,8 @@ export default function ChatPage() {
                 mensagem
             ])
             .then(({data}) => {
-                //console.log('resposta da inserção', {data});
-                setListaDeMensagens([data[0], ...listaDeMensagens]);
-            });
-
+                console.log('resposta da inserção', data);
+            }); 
         setMensagem('');
     }
 
@@ -132,7 +145,13 @@ export default function ChatPage() {
                                     color: appConfig.theme.colors.neutrals[200],
                                 }}
                             />
-                            <ButtonSendSticker/>
+                             {/* CallBack */}
+                            <ButtonSendSticker
+                                onStickerClick={(sticker) => {
+                                    console.log('Salva esse sticker no banco');
+                                    handleNovaMensagem(':sticker:' + sticker);
+                                }}
+                            />
                         </Box>
                     </Box>
                 </Box>
@@ -217,6 +236,13 @@ function MessageList(props) {
                             {(new Date().toLocaleDateString())}
                         </Text>
                     </Box>
+                    {mensagem.texto.startsWith(':sticker:')
+                        ? (
+                            <Image src={mensagem.texto.replace(':sticker:', '')} />
+                        )
+                        : (
+                            mensagem.texto
+                    )}
                     {mensagem.texto}
                 </Text>
                 );               
